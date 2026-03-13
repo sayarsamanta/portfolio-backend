@@ -9,13 +9,14 @@ const {
 } = require("../controllers/userController");
 
 const authMiddleware = require("../middleware/authMiddleware");
+const upload = require("../middleware/upload");
 
 // Public
 router.get("/", getUser);
 
 // Protected
-router.post("/", authMiddleware, createUser);
-router.put("/", authMiddleware, updateUser);
+router.post("/", authMiddleware, upload.single("profileImg"), createUser);
+router.put("/", authMiddleware, upload.single("profileImg"), updateUser);
 router.delete("/", authMiddleware, deleteUser);
 
 module.exports = router;

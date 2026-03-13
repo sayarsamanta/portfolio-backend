@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
-const { diff } = require("deep-object-diff");
+const cloudinary = require("cloudinary").v2;
+const { getPublicId } = require("../utils/validators");
 // GET USER
 const getUser = async (req, res) => {
   try {
@@ -18,6 +19,13 @@ const getUser = async (req, res) => {
 };
 const createUser = async (req, res) => {
   try {
+    let payload = {};
+
+    if (req.body.data) {
+      payload = JSON.parse(req.body.data);
+    } else {
+      payload = req.body;
+    }
     const existing = await User.findOne();
 
     if (existing) {
@@ -25,19 +33,28 @@ const createUser = async (req, res) => {
         message: "User already exists",
       });
     }
-    if (req.body?.about?.personalInterests) {
-      const interests = req.body.about.personalInterests;
+    if (req.file) {
+      // delete old image
+
+      payload.profileImg = req.file.path;
+    }
+    if (payload?.about?.personalInterests) {
+      const interests = payload.about.personalInterests;
 
       if (Array.isArray(interests) && typeof interests[0] === "object") {
-        req.body.about.personalInterests = Object.values(interests[0]);
+        payload.about.personalInterests = Object.values(interests[0]);
       }
       console.log(interests);
     }
+    if (req.body.about) {
+      payload.about = JSON.parse(req.body.about);
+    }
 
-    const user = await User.create(req.body);
+    const user = await User.create(payload);
 
     res.status(201).json({
       message: "User created successfully",
+      imageUrl: req.file?.path,
       data: user,
     });
   } catch (error) {
@@ -67,10 +84,31 @@ const createUser = async (req, res) => {
 // };
 const updateUser = async (req, res) => {
   try {
+    const existing = await User.findOne();
+    let payload = {};
+
+    if (req.body.data) {
+      payload = JSON.parse(req.body.data);
+    } else {
+      payload = req.body;
+    }
+
+    // if image uploaded
+    if (req.file) {
+      if (existing?.profileImg) {
+        const publicId = getPublicId(existing.profileImg);
+        await cloudinary.uploader.destroy(publicId);
+      }
+      payload.profileImg = req.file.path;
+    }
+    if (payload.about && typeof payload.about === "string") {
+      payload.about = JSON.parse(payload.about);
+    }
+
     const updatedUser = await User.findOneAndUpdate(
       {},
-      { $set: req.body },
-      { new: true, runValidators: true }
+      { $set: payload },
+      { returnDocument: "after", runValidators: true }
     );
 
     res.json(updatedUser);

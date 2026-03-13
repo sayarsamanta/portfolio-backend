@@ -7,8 +7,8 @@ const generateSlug = (text) => slugify(text, { lower: true, strict: true });
 
 // Validate required fields for Experience
 const validateExperienceData = (data) => {
-  const { role, company, duration, description, tech } = data;
-  if (!role || !company || !duration || !description || !tech?.length) {
+  const { role, company, duration, description, tech } = data || {};
+  if (!role || !company || !duration || !description) {
     throw new Error(
       "All required fields (role, company, duration, description, tech) must be provided."
     );
@@ -41,6 +41,14 @@ const validateProjectData = (data) => {
   }
 };
 
+const getPublicId = (url) => {
+  const parts = url.split("/");
+  const file = parts.pop();
+  const folder = parts.pop();
+  const publicId = `${folder}/${file.split(".")[0]}`;
+  return publicId;
+};
+
 // Validate MongoDB ObjectId
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
@@ -49,4 +57,5 @@ module.exports = {
   validateExperienceData,
   validateProjectData,
   isValidObjectId,
+  getPublicId,
 };

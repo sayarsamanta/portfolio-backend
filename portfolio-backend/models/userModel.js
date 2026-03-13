@@ -14,10 +14,9 @@ const achievementSchema = new mongoose.Schema(
   {
     id: String,
     title: String,
-    issuer: String,
     year: String,
     description: String,
-    icon: String,
+    type: String,
   },
   { _id: false }
 );
@@ -42,6 +41,9 @@ const aboutSchema = new mongoose.Schema(
       headline: { type: String, default: "" },
       subText: { type: String, default: "" },
       story: { type: String, default: "" },
+      bio: { type: String, default: "" },
+      brief: { type: String, default: "" },
+      qoute: { type: String, default: "" },
     },
 
     skills: {
@@ -49,9 +51,15 @@ const aboutSchema = new mongoose.Schema(
       default: [],
     },
 
-    achievements: [achievementSchema],
+    achievements: {
+      type: [achievementSchema],
+      default: [],
+    },
 
-    education: [educationSchema],
+    education: {
+      type: [educationSchema],
+      default: [],
+    },
 
     personalInterests: {
       type: [String],
@@ -70,24 +78,27 @@ const userSchema = new mongoose.Schema(
 
     name: {
       type: String,
-      required: true,
     },
 
     username: {
       type: String,
-      required: true,
       unique: true,
     },
 
     email: {
       type: String,
-      required: true,
       unique: true,
     },
 
     role: {
       type: String,
       default: "admin",
+    },
+    resume: {
+      type: String,
+    },
+    resumePublicId: {
+      type: String,
     },
 
     profileImg: String,

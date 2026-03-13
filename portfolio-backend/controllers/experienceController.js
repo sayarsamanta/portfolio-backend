@@ -4,9 +4,13 @@ const { generateSlug, validateExperienceData } = require("../utils/validators");
 // ADD EXPERIENCE
 const addExperience = async (req, res) => {
   try {
-    validateExperienceData(req.body);
+    const data = req.body;
+    if (!data) {
+      return res.status(400).json({ message: "Missing experience data" });
+    }
+    validateExperienceData(data);
 
-    const slug = generateSlug(req.body.company);
+    const slug = generateSlug(data.company);
 
     // Check slug uniqueness
     const existing = await Experience.findOne({ slug });
@@ -15,7 +19,7 @@ const addExperience = async (req, res) => {
         .status(400)
         .json({ message: "Experience for this company already exists." });
 
-    const exp = await Experience.create({ ...req.body, slug });
+    const exp = await Experience.create({ ...data, slug });
     res
       .status(201)
       .json({ message: "Experience added successfully", data: exp });
@@ -46,11 +50,9 @@ const editExperience = async (req, res) => {
       _id: { $ne: req.params.id },
     });
     if (existingSlug)
-      return res
-        .status(400)
-        .json({
-          message: "Another experience with this company already exists.",
-        });
+      return res.status(400).json({
+        message: "Another experience with this company already exists.",
+      });
 
     const exp = await Experience.findOneAndUpdate(
       { slug: req.params.slug },
@@ -69,7 +71,9 @@ const editExperience = async (req, res) => {
 // DELETE EXPERIENCE
 const deleteExperience = async (req, res) => {
   try {
-    const exp = await Experience.findOneAndDelete({ slug: req.params.slug });
+    const exp = await Experience.findOneAndDelete({
+      slug: req.params.slug,
+    });
     if (!exp) return res.status(404).json({ message: "Experience not found." });
     res.json({ message: "Experience deleted successfully" });
   } catch (error) {
