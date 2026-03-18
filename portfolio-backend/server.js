@@ -27,6 +27,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(5174, () => {
-  console.log(`Server running on port ${5174}`);
-  console.log(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD);
+  console.debug("running");
 });

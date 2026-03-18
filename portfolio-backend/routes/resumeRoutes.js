@@ -41,7 +41,6 @@ router.delete("/resume", authMiddleware, async (req, res) => {
       data: user,
     });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: "Failed to delete resume" });
   }
 });

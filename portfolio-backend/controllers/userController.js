@@ -44,7 +44,6 @@ const createUser = async (req, res) => {
       if (Array.isArray(interests) && typeof interests[0] === "object") {
         payload.about.personalInterests = Object.values(interests[0]);
       }
-      console.log(interests);
     }
     if (req.body.about) {
       payload.about = JSON.parse(req.body.about);
@@ -84,7 +83,6 @@ const createUser = async (req, res) => {
 // };
 const updateUser = async (req, res) => {
   try {
-    console.log(req?.file);
     const existing = await User.findOne();
     let payload = {};
 
