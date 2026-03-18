@@ -45,15 +45,6 @@ const editExperience = async (req, res) => {
 
     const newSlug = generateSlug(req.body.company);
 
-    const existingSlug = await Experience.findOne({
-      slug: newSlug,
-      _id: { $ne: req.params.id },
-    });
-    if (existingSlug)
-      return res.status(400).json({
-        message: "Another experience with this company already exists.",
-      });
-
     const exp = await Experience.findOneAndUpdate(
       { slug: req.params.slug },
       { ...req.body, slug: newSlug },

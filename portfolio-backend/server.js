@@ -8,6 +8,7 @@ const projectRoutes = require("./routes/projectRoutes");
 const expRoutes = require("./routes/expRoute");
 const userRoute = require("./routes/userRoute");
 const resumeRoutes = require("./routes/resumeRoutes");
+const contactRouter = require("./controllers/contact");
 connectDB();
 
 const app = express();
@@ -20,6 +21,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/experience", expRoutes);
 app.use("/api/user", userRoute);
 app.use("/api", resumeRoutes);
+app.use("/api/contact", contactRouter);
 app.get("/", (req, res) => {
   res.send("Portfolio API Running");
 });

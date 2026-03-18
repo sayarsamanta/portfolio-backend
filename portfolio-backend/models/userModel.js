@@ -44,6 +44,7 @@ const aboutSchema = new mongoose.Schema(
       bio: { type: String, default: "" },
       brief: { type: String, default: "" },
       qoute: { type: String, default: "" },
+      profileImg: { type: String, default: "" },
     },
 
     skills: {

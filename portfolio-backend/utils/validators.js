@@ -20,17 +20,14 @@ const validateExperienceData = (data) => {
 
 // Validate required fields for Project
 const validateProjectData = (data) => {
-  const { title, description, techStack, link } = data;
-  if (!title || !description || !techStack?.length) {
+  const { title, description, tech, link } = data;
+  if (!title || !description || !tech?.length) {
     throw new Error(
-      "All required fields (title, description, techStack) must be provided."
+      "All required fields (title, description, tech) must be provided."
     );
   }
-  if (
-    !Array.isArray(techStack) ||
-    techStack.some((t) => typeof t !== "string")
-  ) {
-    throw new Error("techStack must be an array of strings.");
+  if (!Array.isArray(tech) || tech.some((t) => typeof t !== "string")) {
+    throw new Error("tech must be an array of strings.");
   }
   if (link) {
     try {

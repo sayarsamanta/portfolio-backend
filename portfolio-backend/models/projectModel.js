@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
-
+const cloudinary = require("cloudinary").v2;
 const projectSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true,
       trim: true,
@@ -64,7 +64,8 @@ const projectSchema = new mongoose.Schema(
 
     screenshots: [
       {
-        type: String,
+        url: String,
+        public_id: String,
       },
     ],
     order: {
@@ -81,6 +82,19 @@ const projectSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+// projectSchema.post("findOneAndDelete", async function (doc) {
+//   if (doc && doc.screenshots && doc.screenshots.length > 0) {
+//     try {
+//       const deletePromises = doc.screenshots.map((img) =>
+//         cloudinary.uploader.destroy(img.public_id)
+//       );
+//       await Promise.all(deletePromises);
+//       console.log("Successfully deleted images from Cloudinary");
+//     } catch (error) {
+//       console.error("Cloudinary deletion failed:", error);
+//     }
+//   }
+// });
 
 projectSchema.pre("save", function () {
   if (this.name) {

@@ -84,6 +84,7 @@ const createUser = async (req, res) => {
 // };
 const updateUser = async (req, res) => {
   try {
+    console.log(req?.file);
     const existing = await User.findOne();
     let payload = {};
 
@@ -95,11 +96,11 @@ const updateUser = async (req, res) => {
 
     // if image uploaded
     if (req.file) {
-      if (existing?.profileImg) {
-        const publicId = getPublicId(existing.profileImg);
+      if (existing?.about?.intro?.profileImg) {
+        const publicId = getPublicId(existing?.about?.intro?.profileImg);
         await cloudinary.uploader.destroy(publicId);
       }
-      payload.profileImg = req.file.path;
+      payload.about.intro.profileImg = req.file.path;
     }
     if (payload.about && typeof payload.about === "string") {
       payload.about = JSON.parse(payload.about);

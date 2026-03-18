@@ -11,9 +11,9 @@ const deleteResume = async (publicId) => {
     const result = await cloudinary.uploader.destroy(publicId, {
       resource_type: "raw",
     });
-    console.log("Deleted existing resume:", result);
+    res.status(200).json({ message: "resume deleted successfully" });
   } catch (err) {
-    console.error("Error deleting resume:", err);
+    res.status(500).json({ message: "error deleting resume" });
   }
 };
 
@@ -30,14 +30,16 @@ router.delete("/resume", authMiddleware, async (req, res) => {
       resource_type: "raw",
     });
 
-    console.log("Deleted resume:", result);
-
     // Remove resume info from DB
     user.resume = null;
     user.resumePublicId = null;
     await user.save();
 
-    res.json({ success: true, message: "Resume deleted successfully" });
+    res.status(201).json({
+      success: true,
+      message: "Resume deleted successfully",
+      data: user,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to delete resume" });
@@ -72,10 +74,9 @@ router.post(
         await user.save();
       }
 
-      res.json({
+      res.status(201).json({
         message: "Upload successful",
-        url: result.secure_url,
-        public_id: result.public_id,
+        user: user,
       });
     } catch (err) {
       res.status(500).json({ error: err.message });
