@@ -13,7 +13,11 @@ connectDB();
 
 const app = express();
 
-const allowedOrigins = [process.env.CLIENT_URL, "http://localhost:5173"];
+const allowedOrigins = [
+  "https://sayarsamanta.dev",
+  "https://www.sayarsamanta.dev",
+  "http://localhost:5173",
+];
 
 app.use(
   cors({
@@ -22,10 +26,9 @@ app.use(
       if (!origin) return callback(null, true);
 
       // Allow localhost ports automatically
-      if (origin.startsWith("http://localhost")) return callback(null, true);
-
-      // Allow production frontend
-      if (origin === process.env.CLIENT_URL) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
 
       console.warn("Blocked by CORS:", origin);
       callback(new Error("Not allowed by CORS"));

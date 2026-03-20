@@ -9,6 +9,7 @@ const sendMail = async ({ name, email, message }) => {
   const data = await resend.emails.send({
     from: "Sayar Samanta Portfolio <onboarding@resend.dev>",
     to: "sayarsamanta@gmail.com",
+    reply_to: email,
     subject: `Portfolio Contact from ${name}`,
     html: `
       <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f5f5f7; padding: 20px;">
@@ -88,13 +89,10 @@ router.post("/", async (req, res) => {
       email,
       message,
     });
-    console.log(response);
     if (response) {
       res.status(200).json({ message: "Message sent successfully." });
     }
   } catch (error) {
-    console.error("MAIL ERROR:", error);
-
     res.status(500).json({
       error: error.message,
     });
