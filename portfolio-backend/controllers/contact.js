@@ -8,8 +8,8 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const sendMail = async ({ name, email, message }) => {
   const data = await resend.emails.send({
     from: process.env.SENDER_EMAIL,
-    to: "sayarsamanta@gmail.com",
-    reply_to: email,
+    to: email,
+    reply_to: process.env.EMAIL_USER,
     subject: `Portfolio Contact from ${name}`,
     html: `
       <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f5f5f7; padding: 20px;">
