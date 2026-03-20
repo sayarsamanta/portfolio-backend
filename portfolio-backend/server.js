@@ -45,7 +45,6 @@ app.use(
 );
 // app.use(cors());
 app.use(express.json());
-app.use(limiter);
 app.disable("x-powered-by");
 const PORT = process.env.PORT;
 app.use("/api/auth", authRoutes);
