@@ -13,20 +13,27 @@ connectDB();
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:5173", process.env.CLIENT_URL];
+const allowedOrigins = [process.env.CLIENT_URL, "http://localhost:5173"];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
+      // Allow requests with no origin (Postman, local dev)
+      if (!origin) return callback(null, true);
+
+      // Allow localhost ports automatically
+      if (origin.startsWith("http://localhost")) return callback(null, true);
+
+      // Allow production frontend
+      if (origin === process.env.CLIENT_URL) return callback(null, true);
+
+      console.warn("Blocked by CORS:", origin);
+      callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
   })
 );
+// app.use(cors());
 app.use(express.json());
 const PORT = process.env.PORT;
 app.use("/api/auth", authRoutes);
