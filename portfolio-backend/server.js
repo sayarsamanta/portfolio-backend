@@ -56,6 +56,9 @@ app.use("/api/contact", limiter, contactRouter);
 app.get("/", (req, res) => {
   res.send("Portfolio API Running");
 });
+app.get("/health", (req, res) => {
+  res.status(200).send("health route");
+});
 
 app.listen(PORT, () => {
   console.debug("running");
