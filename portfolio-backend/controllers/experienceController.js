@@ -31,7 +31,7 @@ const addExperience = async (req, res) => {
 // GET ALL EXPERIENCE
 const getAllExps = async (req, res) => {
   try {
-    const exp = await Experience.find().sort({ order: 1 });
+    const exp = await Experience.find().sort({ updatedAt: -1 });
     res.json({ data: exp });
   } catch (error) {
     res.status(500).json({ message: error.message });

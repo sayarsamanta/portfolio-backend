@@ -1,36 +1,41 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
-const expSchema = new mongoose.Schema({
-  role: {
-    type: String,
-    require: true,
-    trim: true,
+const expSchema = new mongoose.Schema(
+  {
+    role: {
+      type: String,
+      require: true,
+      trim: true,
+    },
+    slug: {
+      type: String,
+      unique: true,
+      index: true,
+    },
+    company: {
+      type: String,
+      require: true,
+      trim: true,
+    },
+    duration: {
+      type: String,
+      require: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      require: true,
+    },
+    tech: {
+      type: [String],
+      require: true,
+      trim: true,
+    },
   },
-  slug: {
-    type: String,
-    unique: true,
-    index: true,
-  },
-  company: {
-    type: String,
-    require: true,
-    trim: true,
-  },
-  duration: {
-    type: String,
-    require: true,
-    trim: true,
-  },
-  description: {
-    type: String,
-    require: true,
-  },
-  tech: {
-    type: [String],
-    require: true,
-    trim: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 expSchema.pre("save", function () {
   if (this.company && this.isModified("company")) {

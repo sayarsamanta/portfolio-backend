@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const slugify = require("slugify");
-const cloudinary = require("cloudinary").v2;
 const projectSchema = new mongoose.Schema(
   {
     title: {

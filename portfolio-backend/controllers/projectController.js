@@ -65,7 +65,7 @@ const createProject = async (req, res) => {
 // GET ALL PROJECTS
 const getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.find().sort({ createdAt: -1 });
+    const projects = await Project.find().sort({ updatedAt: -1 });
     res.json({ data: projects });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -110,7 +110,7 @@ const updateProject = async (req, res) => {
     // OPTIONAL: If you want to delete old images from Cloudinary first,
     // you'd call cloudinary.uploader.destroy here using the old public_ids.
 
-    if (screenshots) {
+    if (screenshots.length > 0) {
       updateData.screenshots = screenshots;
     }
 
