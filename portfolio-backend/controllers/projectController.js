@@ -93,10 +93,10 @@ const updateProject = async (req, res) => {
       slug: newSlug,
       _id: { $ne: req.params.id },
     });
-    if (!existingSlug)
-      return res.status(400).json({ message: "Project does not exist." });
+    if (existingSlug)
+      return res.status(400).json({ message: "Project title already exists." });
     const tech = Array.isArray(req.body.tech)
-      ? req.body.tech.flat() // This fixes the [["React"], "Node"] issue
+      ? req.body.tech.flat()
       : req.body.tech
       ? [req.body.tech]
       : [];
@@ -106,9 +106,6 @@ const updateProject = async (req, res) => {
           public_id: file.filename,
         }))
       : [];
-
-    // OPTIONAL: If you want to delete old images from Cloudinary first,
-    // you'd call cloudinary.uploader.destroy here using the old public_ids.
 
     if (screenshots.length > 0) {
       updateData.screenshots = screenshots;
