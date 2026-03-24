@@ -93,8 +93,7 @@ const updateProject = async (req, res) => {
       slug: newSlug,
       _id: { $ne: req.params.id },
     });
-    if (existingSlug)
-      return res.status(400).json({ message: "Project title already exists." });
+
     const tech = Array.isArray(req.body.tech)
       ? req.body.tech.flat()
       : req.body.tech
