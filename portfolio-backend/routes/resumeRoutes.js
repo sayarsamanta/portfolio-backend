@@ -11,10 +11,7 @@ const deleteResume = async (publicId) => {
     const result = await cloudinary.uploader.destroy(publicId, {
       resource_type: "raw",
     });
-    res.status(200).json({ message: "resume deleted successfully" });
-  } catch (err) {
-    res.status(500).json({ message: "error deleting resume" });
-  }
+  } catch (err) {}
 };
 
 router.delete("/resume", authMiddleware, async (req, res) => {
